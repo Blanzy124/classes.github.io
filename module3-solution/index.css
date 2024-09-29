@@ -34,9 +34,14 @@
     border-left: 2px solid black;
     border-right: 2px solid black;
 }
+.margin-beef:hover{
+    background-color: rgb(173, 168, 168);
+}
+.margin-beef:hover:active{
+    background-color: rgb(145, 142, 142);
+}
 
 
-@media (max-width: 767px){
 .nav-links:hover{
     background-color: rgb(173, 168, 168);
 
@@ -45,4 +50,4 @@
     background-color: rgb(145, 142, 142);
 
 }
-}
+
