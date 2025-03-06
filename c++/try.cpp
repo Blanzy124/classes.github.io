@@ -36,6 +36,7 @@ int main(){
     {
         std::cout<<"Name: "<<member[o].name<<endl<<"Age: "<<member[o].age<<endl<<"Contribution: "<<member[o].contribution<<endl;
     }
+    cin.get();
     return 0;
 }
 
