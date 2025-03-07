@@ -5,40 +5,101 @@ using namespace std;
 using std::cout;
 using std::cin;
 
-struct houseMembers
-{
-    std::string name;
-    int age;
-    int contribution; 
+struct product{
+    string name;
+    double price;
+    int stock;
 };
 
-int main(){
-    int membersInput;
-    cout<<"How many members you would like creatre? ";
-    cin>>membersInput;
+
+void showSimpleSentence(string message){
+    cout<<message;
+};
+
+void closeOptions(){
+    int options;
+    showSimpleSentence("Main menu enter 1, else close");
     cin.ignore();
-    vector<houseMembers> member(membersInput);
-    for (int i = 0; i < membersInput; i++)
+    cin>>options;
+    if (options == 1)
     {
-        
-        cout<<"Enter name for the member number "<<i + 1<<": \n";
-        getline(cin, member[i].name);
+        cin.ignore();
+        exit(1);
+    }
+    else{
+        exit(1);
+    }
+    
+};
 
-        cout<<"Enter age for the member number "<<i + 1<<": \n";
-        cin>>member[i].age;
-
-        cout<<"Enter contribution for the member number "<<i + 1<<": \n";
-        cin>>member[i].contribution;
-
+void addProduct(vector<product>& product, int stockProductNumber){
+    int newProducts;
+    showSimpleSentence("How many products you would like add? ");
+    try
+    {
+        cin>>newProducts;
+    }
+    catch(const string err)
+    {
+        cout<<err;
+        showSimpleSentence("Must be numbers only...");
+        closeOptions();
+        return;
+    }
+    for (int i = 0; i < newProducts; i++)
+    {
+        cin.ignore();
+        cout<<"What is the name for the product number "<<i + 1<<"? :\n";
+        cin>>product[stockProductNumber + 1].name;
+        cout<<"What is the price for the product number "<<i + 1<<"? :\n";
+        cin>>product[stockProductNumber + 1].price;
+        cout<<"What is the new units stock for the product number "<<i + 1<<"? :\n";
+        cin>>product[stockProductNumber + 1].stock;
         cin.ignore();
     }
-    for (int o = 0; o < membersInput; o++)
+    showSimpleSentence("Product/s has been add");
+    //closeOptions();
+    return;
+}
+
+void showFullInventary(vector<product>& product, int stockProductNumber){
+    for (int i = 0; i < stockProductNumber; i++)
     {
-        std::cout<<"Name: "<<member[o].name<<endl<<"Age: "<<member[o].age<<endl<<"Contribution: "<<member[o].contribution<<endl;
+        cout<<"Name: "<<product[i].name<<"Price: "<<product[i].price<<"Stock: "<<product[i].stock<<endl;
     }
-    cin.get();
-    return 0;
+    cin.ignore();
+    closeOptions();
+    return;
 }
 
 
+int main(){
+    int newProducts;
+    vector<product>  product(newProducts);
+    int stockProductNumber = product.size();
 
+    int mainMenuObtions;
+    showSimpleSentence("What do you want to do? \n");
+    showSimpleSentence("Option 1: add a new product\n");
+    showSimpleSentence("Option 2: show all the inventary\n");
+    showSimpleSentence("Option 3: show total inventary price\n");
+    showSimpleSentence("Option 4: add a new product\n");
+    cin>>mainMenuObtions;
+    cin.ignore();
+    switch (mainMenuObtions)
+    {
+    case 1:
+        addProduct(product, stockProductNumber);
+        break;
+    case 2:
+        showFullInventary(product, stockProductNumber);
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    default:
+        break;
+    }
+    return 0;
+}
