@@ -1,134 +1,182 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 using namespace std;
 using std::cout;
 using std::cin;
-struct products{
-    string name;
-    double price;
-    int stock;
+
+class Vehicle{
+    protected:
+        string brand;
+        int year;
+    public:
+        Vehicle(string, int);
+        virtual void showInfo();
+        virtual ~Vehicle();
 };
 
-void closeOptions();
-void addProduct(vector<products>* product);
-void showTotalInventaryPrice(vector<products>& products);
+Vehicle::Vehicle(string _brand, int _year) : brand(_brand), year(_year){
+    brand = _brand;
+    year = _year;
+}
+Vehicle::~Vehicle(){};
 
-void showSimpleSentence(string message){
-    cout<<message;
+void Vehicle::showInfo(){
+    cout<<"Brand: "<<brand<<" | Year: "<< year;
+}
+/// ///
+class Car : public Vehicle{
+    protected:
+        int doors;
+    public:
+        Car(string, int, int);
+        void showInfo();
 };
 
+Car::Car(string _brand, int _year, int _doors) : Vehicle(_brand, _year){
+    doors = _doors;
+};
 
-void showFullInventary(vector<products>& product){
-    cout<<"number of products in stock "<<product.size()<<endl;
-    for (const auto &p : product)
+void Car::showInfo(){
+    Vehicle::showInfo();
+    cout<<" |Doors "<<doors<<"\n";
+}
+/// ///
+class Truck : public Vehicle{
+    protected:
+        int  loadCapacity;
+    public:
+    Truck(string, int, int);
+        void showInfo();
+};
+
+Truck::Truck(string _brand, int _year, int _loadCapacity) : Vehicle(_brand, _year){
+    loadCapacity = _loadCapacity;
+};
+
+void Truck::showInfo(){
+    Vehicle::showInfo();
+    cout<<" |Load Capacity "<<loadCapacity<<"\n";
+}
+
+//////
+
+void addNewVehicle(vector<Vehicle*> &vehicles){
+    int newVehiclesNumber;
+    int vehicleType;
+    cout<<"What type of vehicle, car (enter 1) or truck (enter 2)? ";
+    try
     {
-        cout<<"Name: "<<p.name<<"  "<<"Price: "<<p.price<<"  "<<"Stock: "<<p.stock<<endl;
+        cin>>vehicleType;
     }
-    closeOptions();
-    return;
-};
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
+    cout<<"How Many vehicles you would like add? ";
+    try
+    {
+        cin>>newVehiclesNumber;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    if (vehicleType != 1 && vehicleType != 2) {
+        cout << "Invalid vehicle type." << endl;
+        return;
+    }
+    if(vehicleType == 1){
+        for (int i = 0; i < newVehiclesNumber; i++)
+        {
+            string _brand;
+            int _year;
+            int _doors;
+            cin.ignore();
+            cout<<"Brand of the car number "<<i + 1<<": ";
+            getline(cin, _brand);
+            cout<<"Year of the car number "<<i + 1<<": ";
+            cin>>_year;
+            cout<<"Doors of the car number "<<i + 1<<": ";
+            cin>>_doors;
+            vehicles.push_back(new Car(_brand, _year, _doors));
+            cin.ignore();
+            
+        }
+    }
+    if(vehicleType == 2){
+        for (int i = 0; i < newVehiclesNumber; i++)
+        {
+            string _brand;
+            int _year;
+            int _loadCapacity;
+            cin.ignore();
+            cout<<"Brand of the truck number "<<i + 1<<": ";
+            getline(cin, _brand);
+            cout<<"Year of the truck number "<<i + 1<<": ";
+            cin>>_year;
+            cout<<"Load Capacity of the truck number "<<i + 1<<": ";
+            cin>>_loadCapacity;
+            vehicles.push_back(new Truck(_brand, _year, _loadCapacity));
+            cin.ignore();
+            
+        }
+        //cout<<vehicles.size()<<"\n";
+    }
+    
+
+    
+    
+}
+
+
+void showVehiclesData(vector<Vehicle*> &vehicles){
+    for (Vehicle* vehicle : vehicles)
+    {
+        vehicle->showInfo();
+    }
+    
+}
+
+
 
 int main(){
-    int newProducts;
-    int mainMenuObtions;
-    static vector<products> product;
-    showSimpleSentence("What do you want to do? \n");
-    showSimpleSentence("Option 1: add a new product\n");
-    showSimpleSentence("Option 2: show all the inventary\n");
-    showSimpleSentence("Option 3: show total inventary price\n");
-    showSimpleSentence("Option 4: close program\n");
-    cin>>mainMenuObtions;
-    cin.ignore();
-    switch (mainMenuObtions)
-    {
-    case 1:
-        addProduct(&product);
-        break;
-    case 2:
-        showFullInventary(product);
-        break;
-    case 3:
-        showTotalInventaryPrice(product);
-        break;
-    case 4:
-        break;
-    default:
-        break;
+    static vector<Vehicle*> vehicles;
+    int userOption;
+    do
+    {   
+        cout<<"1 to add a new vehicle."<<endl;
+        cout<<"2 to show all vehicles."<<endl;
+        cout<<"3 to close program."<<endl;
+        try
+        {
+            cin>>userOption;
+        }
+        catch(const std::exception& e)
+        {
+            cout<<"Must be a number";
+            std::cerr << e.what() << '\n';
+        }
+        
+        
+        switch (userOption)
+        {
+        case 1:
+            addNewVehicle(vehicles);
+            break;
+        case 2:
+            showVehiclesData(vehicles);
+            break;
+        default:
+            break;
+        }
+    } while (userOption != 3);
+    
+    for (auto& vehicle : vehicles) {
+        delete vehicle; 
     }
     return 0;
 }
 
-void closeOptions(){
-    int closeOption;
-    showSimpleSentence("Write 1 to go back to main menu: ");
-    cin>>closeOption;
-    if(closeOption == 1){
-        main();
-    }
-    else{
-        exit(1);
-    }
-    return;
-};
-
-
-
-void addProduct(vector<products>* product){
-    int newProducts;
-    showSimpleSentence("How many products you would like add? ");
-    try
-    {
-        cin>>newProducts;
-    }
-    catch(const runtime_error& e)
-    {
-        cout<<e.what();
-        showSimpleSentence("Must be numbers only...");
-        closeOptions();
-        return;
-    };
-
-    for ( int i = 0; i < newProducts; i++)
-    {   
-        cin.ignore();
-        string newProductName;
-        double newProductPrice;
-        int newProductStock;
-        products p;
-
-        cout<<"What is the name for the product number "<<i + 1<<"? :";
-        getline(cin, p.name);
-        cout<<"What is the price for the product number "<<i + 1<<"? :";
-        cin>>p.price;
-        cout<<"What is the new units stock for the product number "<<i + 1<<"? :";
-        cin>>p.stock;
-        product->push_back(p);
-    }
-    showSimpleSentence("Product/s has been add\n");
-    cout<<"number of products in stock "<<product->size()<<endl;
-    closeOptions();
-    return;
-};
-
-void showTotalInventaryPrice(vector<products>& products){
-    double totalInventary = 0;
-    if (products.size() == 0)
-    {
-        cout<<"There are not products";
-        closeOptions();
-    }
-    
-    for (int i = 0; i < products.size(); i++ )
-    {
-        totalInventary = totalInventary + products[i].price;
-        if (i == products.size())
-        {
-            cout<<"Total inventary value is :"<<(double)totalInventary<<endl;
-        }
-        
-    }
-    closeOptions();
-    
-};
 
