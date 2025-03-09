@@ -6,10 +6,6 @@ using std::cout;
 using std::cin;
 
 int main(){
-    int x = 20;
-    int *ptr_x = &x;
-    cout<<ptr_x;
-    int close;
-    cin>>close;
-    
+ double *direction = 0x7613fff9d4;
+ cout<<*direction;
 }

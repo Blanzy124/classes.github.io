@@ -15,10 +15,7 @@ class Vehicle{
         virtual ~Vehicle();
 };
 
-Vehicle::Vehicle(string _brand, int _year) : brand(_brand), year(_year){
-    brand = _brand;
-    year = _year;
-}
+Vehicle::Vehicle(string _brand, int _year) : brand(_brand), year(_year){}
 Vehicle::~Vehicle(){};
 
 void Vehicle::showInfo(){
